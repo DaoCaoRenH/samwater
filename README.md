@@ -1,16 +1,24 @@
 # **环境配置**
 
-```bash
-conda create -n samadapter python==3.8
-```
+创建环境
 
 ```bash
-conda activate samadapter
+conda create -n samwater python==3.8
 ```
+
+激活环境
+
+```bash
+conda activate samwater
+```
+
+安装pytorch
 
 ```bash
 pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
 ```
+安装相关环境
+
 ```bash
 pip install -U openmim
 ```
@@ -22,6 +30,8 @@ mim install mmcv-full==1.6.1
 ```bash
 mim install mmsegmentation==0.27.0
 ```
+
+克隆仓库
 
 ```bash
 git clone https://github.com/DaoCaoRenH/samwater.git
