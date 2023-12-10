@@ -8,14 +8,9 @@ conda create -n samadapter python==3.8
 conda activate samadapter
 ```
 
-<<<<<<< HEAD
 ```bash
 pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
 ```
-=======
-In Proceedings of the IEEE/CVF International Conference on Computer Vision (pp. 3367-3375).
->>>>>>> 60bd2770b1c4fcb38d98822cae9a17781601ff9e
-
 ```bash
 pip install -U openmim
 ```
@@ -28,7 +23,13 @@ mim install mmcv-full==1.6.1
 mim install mmsegmentation==0.27.0
 ```
 
-在当前目录下执行
+```bash
+git clone https://github.com/DaoCaoRenH/samwater.git
+```
+
+```bash
+cd samwater
+```
 
 ```bash
 pip install -r requirements.txt
