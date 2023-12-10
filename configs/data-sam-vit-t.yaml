@@ -1,0 +1,93 @@
+train_dataset:
+  dataset:
+    name: paired-image-folders
+    args:
+      root_path_1: 
+      root_path_2: 
+      cache: none
+      split_key: train
+  wrapper:
+    name: train
+    args:
+      inp_size: 1024
+      augment: false
+  batch_size: 2
+
+val_dataset:
+  dataset:
+    name: paired-image-folders
+    args:
+      root_path_1: 
+      root_path_2: 
+      cache: none
+      split_key: test
+  wrapper:
+    name: val
+    args:
+      inp_size: 1024
+  batch_size: 1
+
+test_dataset:
+  dataset:
+    name: paired-image-folders
+    args:
+      root_path_1: data/val/img
+      root_path_2: data/val/label
+      cache: none
+      split_key: test
+  wrapper:
+    name: val
+    args:
+      inp_size: 1024
+  batch_size: 1
+
+eval_type: iou
+sam_checkpoint: /root/autodl-tmp/mobile_sam.pt
+data_norm:
+  inp:
+    sub:
+    - 0.5
+    div:
+    - 0.5
+  gt:
+    sub:
+    - 0.5
+    div:
+    - 0.5
+  gt_rgb:
+    sub:
+    - 0.5
+    div:
+    - 0.5
+model:
+  name: mobile_sam
+  args:
+    inp_size: 1024
+    loss: iou
+    encoder_mode:
+      name: mobile_sam
+      img_size: 1024
+      mlp_ratio: 4
+      patch_size: 16
+      qkv_bias: true
+      use_rel_pos: true
+      window_size: 14
+      out_chans: 256
+      scale_factor: 32
+      input_type: fft
+      freq_nums: 0.25
+      prompt_type: highpass
+      prompt_embed_dim: 256
+      tuning_stage: 1234
+      handcrafted_tune: true
+      embedding_tune: true
+      adaptor: adaptor
+      embed_dim: 768
+      depth: 12
+      num_heads: 12
+      global_attn_indexes:
+      - 2
+      - 5
+      - 8
+      - 11
+

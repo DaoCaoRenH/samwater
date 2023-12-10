@@ -1,0 +1,16 @@
+cityscapesscripts==2.2.2
+imageio==2.9.0
+ipdb==0.13.13
+ipython==8.12.2
+matplotlib==3.5.0
+mmcv_full==1.6.1
+numpy==1.21.4
+opencv_python==4.6.0.66
+Pillow==10.1.0
+PyYAML==6.0
+scikit_learn==1.2.2
+scipy==1.10.1
+tensorboardX==2.6.2.2
+terminaltables==3.1.10
+timm==0.9.7
+tqdm==4.65.2
