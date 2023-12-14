@@ -59,3 +59,22 @@ pip install -r requirements.txt
 python test.py --config configs/data-sam-vit-t.yaml --model model.pth
 ```
 
+
+
+# **可视化**
+
+在当前环境安装依赖库
+
+```bash
+pip install gradio==3.45.2
+```
+
+在当前项目路径下运行命令
+
+```bash
+python app.py
+```
+
+打开http://0.0.0.0:7579，可视化界面如下图
+
+![](appsample.png)

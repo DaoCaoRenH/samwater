@@ -4,7 +4,6 @@ import yaml
 import torch
 import torch.nn.functional as F
 from torchvision import transforms
-from mmcv.runner import load_checkpoint
 from collections import OrderedDict
 from typing import Dict, List, Optional, Sequence
 from PIL import Image
@@ -26,10 +25,10 @@ os.environ['MASTER_ADDR'] = 'localhost'
 os.environ['MASTER_PORT'] = '5678'
 os.environ["RANK"] = "0"
 os.environ['WORLD_SIZE'] = '1'
-torch.distributed.init_process_group(backend='nccl')
-local_rank = torch.distributed.get_rank()
-torch.cuda.set_device(local_rank)
-device = torch.device("cuda", local_rank)
+# torch.distributed.init_process_group(backend='nccl')
+# local_rank = torch.distributed.get_rank()
+# torch.cuda.set_device(local_rank)
+# device = torch.device("cuda", 0)
 
 def batched_predict(model, inp, coord, bsize):
     with torch.no_grad():
@@ -52,14 +51,11 @@ def tensor2PIL(tensor):
 
 def eval_psnr(loader, model, use_cuda=True):
     model.eval()
-
-    if local_rank == 0:
-        pbar = tqdm(total=len(loader), leave=False, desc='val')
-    else:
-        pbar = None
+    pbar = tqdm(total=len(loader), leave=False, desc='val')
 
     pred_list = []
     gt_list = []
+    t = []
     for batch in loader:
         if use_cuda:
             for k, v in batch.items():
@@ -73,10 +69,11 @@ def eval_psnr(loader, model, use_cuda=True):
             
         pred = F.interpolate(pred, (gt.shape[2], gt.shape[3]), mode="bilinear", align_corners=False)
         end = time.time()
+        t.append(np.round(end-start, 2))
         # print(end-start)
         
-        batch_pred = [pred for _ in range(dist.get_world_size())]
-        batch_gt = [gt for _ in range(dist.get_world_size())]
+        batch_pred = [pred]
+        batch_gt = [gt]
         
         # import ipdb; ipdb.set_trace()
         # dist.all_gather(batch_pred, pred)
@@ -89,6 +86,7 @@ def eval_psnr(loader, model, use_cuda=True):
     if pbar is not None:
         pbar.close()
     cal(pred_list, gt_list)
+    print(t)
 
 def cal(y_pred, y_true):
     with torch.no_grad():
@@ -169,9 +167,16 @@ def compute_metrics(results: list) -> Dict[str, float]:
     ret_metrics_class.move_to_end('Class', last=False)
     class_table_data = PrettyTable()
     for key, val in ret_metrics_class.items():
+            
             val = [str(v) for v in val]
             class_table_data.add_column(key, val)
+    table_data = PrettyTable()
+    for key, val in metrics.items():
+            val = [val]
+            val = [str(v) for v in val]
+            table_data.add_column(key, val)
     print(class_table_data.get_string())
+    print(table_data.get_string())
 
 def intersect_and_union(pred_label: torch.tensor, label: torch.tensor,
                         num_classes: int):
