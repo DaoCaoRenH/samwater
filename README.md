@@ -75,7 +75,7 @@ pip install gradio==3.45.2
 python app.py
 ```
 
-打开http://0.0.0.0:7579， 可视化界面如下图
+打开http://0.0.0.0:7579 ,可视化界面如下图
 
-<img src="[samwater/appsample.png at main · DaoCaoRenH/samwater (github.com)](https://github.com/DaoCaoRenH/samwater/blob/main/appsample.png)"/>
+![](./appsample.png)
 
