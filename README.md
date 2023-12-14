@@ -59,8 +59,6 @@ pip install -r requirements.txt
 python test.py --config configs/data-sam-vit-t.yaml --model model.pth
 ```
 
-
-
 # **可视化**
 
 在当前环境安装依赖库
@@ -74,6 +72,8 @@ pip install gradio==3.45.2
 ```bash
 python app.py
 ```
+
+在app.py的第60行,model_path = "model.pth"可以修改权重文件路径
 
 打开http://0.0.0.0:7579 ,可视化界面如下图
 
