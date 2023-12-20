@@ -93,5 +93,5 @@ python app.py
 
 打开http://0.0.0.0:7579 ,可视化界面如下图
 
-![](img/appsample.png)
+![](./appsample.png)
 
