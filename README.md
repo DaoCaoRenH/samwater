@@ -67,11 +67,11 @@ python test.py --config configs/data-sam-vit-t.yaml --model model.pth
 
 1.测试环境：Ubuntu20.04
 
-![](./img/testubuntu.png)
+![](img/testubuntu.png)
 
 2.测试环境：Windows10
 
-![](./img/testwindows.png)
+![](img/testwindows.png)
 
 **指标的值不同是因为使用的测试数据集不同**
 
@@ -93,5 +93,5 @@ python app.py
 
 打开http://0.0.0.0:7579 ,可视化界面如下图
 
-![](./img/appsample.png)
+![](img/appsample.png)
 
