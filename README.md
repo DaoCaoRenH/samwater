@@ -53,11 +53,27 @@ pip install -r requirements.txt
 
 第35行root_path_2: data/val/label, data/val/label为测试图片对应标签所在文件夹的路径, 可以根据实际数据集路径修改。该文件夹下只能存放图片。
 
+出现报错时，大概率是因为填写的测试图片路径存在问题，或者测试图片文件夹下存在其他文件
+
 测试命令：在当前目录下执行 --config后是配置文件路径 --model后是权重文件路径
 
 ```bash
 python test.py --config configs/data-sam-vit-t.yaml --model model.pth
 ```
+
+
+
+# **分别在Ubuntu和Windows环境下测试**
+
+1.测试环境：Ubuntu20.04
+
+![](./img/testubuntu.png)
+
+2.测试环境：Windows10
+
+![](./img/testwindows.png)
+
+**指标的值不同是因为使用的测试数据集不同**
 
 # **可视化**
 
@@ -77,5 +93,5 @@ python app.py
 
 打开http://0.0.0.0:7579 ,可视化界面如下图
 
-![](./appsample.png)
+![](./img/appsample.png)
 

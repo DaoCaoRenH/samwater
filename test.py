@@ -69,7 +69,7 @@ def eval_psnr(loader, model, use_cuda=True):
             
         pred = F.interpolate(pred, (gt.shape[2], gt.shape[3]), mode="bilinear", align_corners=False)
         end = time.time()
-        t.append(np.round(end-start, 2))
+        # t.append(np.round(end-start, 2))
         # print(end-start)
         
         batch_pred = [pred]
@@ -86,7 +86,7 @@ def eval_psnr(loader, model, use_cuda=True):
     if pbar is not None:
         pbar.close()
     cal(pred_list, gt_list)
-    print(t)
+    # print(t)
 
 def cal(y_pred, y_true):
     with torch.no_grad():
