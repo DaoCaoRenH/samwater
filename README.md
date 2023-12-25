@@ -31,6 +31,10 @@ mim install mmcv-full==1.6.1
 mim install mmsegmentation==0.27.0
 ```
 
+```bash
+pip install opencv-python-headless
+```
+
 克隆仓库
 
 ```bash
