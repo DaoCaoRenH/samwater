@@ -46,9 +46,9 @@ def eval_psnr(model, img):
     iinit = copy.deepcopy(init)
     ipred = ipred.squeeze(0)
     iinit[0][ipred == 0], iinit[1][ipred == 0], iinit[2][ipred == 0] \
-        = 1, 0, 0
+        = 0, 0, 1
     init *= pred
-    print(init)
+    # print(init)
     end = time.time()
     print(end-start)
     output_mask = tensor2PIL(pred)
@@ -59,8 +59,12 @@ def eval_psnr(model, img):
     return output_iimg, output_img, output_mask
 
 
-def run(img):
-    model_path = "model.pth"
+
+
+if __name__ == '__main__':
+    path = "../SimpleDay/img"
+    model_path = "model0219.pth"
+    save_path = "0224/"
     encoder_mode = {
         "name": "mobile_sam",
         "img_size": 1024,
@@ -74,39 +78,15 @@ def run(img):
     model.to(device='cuda:0')
     # img_path = "img_test/test1.jpg"
     # img = Image.open(img_path)
-    return eval_psnr(model, img)
+    list_img_path = os.listdir(path)
+    print(list_img_path)
+    cnt = 0
+    for img in list_img_path:
+        cnt += 1
 
-
-if __name__ == '__main__':
-
-    import gradio as gr
-    block = gr.Blocks().queue()
-    with block:
-        gr.Markdown("# 水体分割")
-        # gr.Markdown("### Open-World Detection with Grounding DINO")
-
-        with gr.Row():
-            with gr.Column():
-                img_path = gr.Image(source='upload', type="pil")
-                run_button = gr.Button(label="Run")
-
-            with gr.Column():
-                iimg = gr.outputs.Image(
-                    type="pil",
-                    # label="grounding results"
-                ).style(full_width=False, full_height=False)
-                img = gr.outputs.Image(
-                    type="pil",
-                    # label="grounding results"
-                ).style(full_width=False, full_height=False)
-                mask = gr.outputs.Image(
-                    type="pil",
-                    # label="grounding results"
-                ).style(full_width=False, full_height=False)
-        run_button.click(fn=run, inputs=[
-            img_path], outputs=[mask, img, iimg])
-
-    gr.interface
-    block.launch(server_name='0.0.0.0', server_port=7579)
-
-
+        img_path = os.path.join(path, img)
+        img_open = Image.open(img_path)
+        print(cnt, img_path)
+        output_iimg, output_img, output_mask = eval_psnr(model, img_open)
+        outpath = save_path + img
+        output_iimg.save(outpath)
