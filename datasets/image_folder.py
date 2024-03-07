@@ -14,7 +14,7 @@ from datasets import register
 
 @register('image-folder')
 class ImageFolder(Dataset):
-    def __init__(self, path,  split_file=None, split_key=None, first_k=None, size=None,
+    def __init__(self, path, split_file=None, split_key=None, first_k=None, size=None,
                  repeat=1, cache='none', mask=False):
         self.repeat = repeat
         self.cache = cache
@@ -76,7 +76,6 @@ class ImageFolder(Dataset):
             return Image.open(file).convert('RGB')
 
 
-
 # @register('image-folder')
 # class ImageFolder(Dataset):
 #     def __init__(self, path, img_path, split_file=None, split_key=None, size=None,
@@ -112,9 +111,9 @@ class ImageFolder(Dataset):
 #             x = self.filenames[idx, 1]
 #         else:
 #             x = self.filenames[idx, 0]
-            
+
 #         x = os.path.join(self.img_path, x[3:])
-        
+
 #         if self.cache == 'none':
 #             return self.img_process(x)
 #         elif self.cache == 'in_memory':

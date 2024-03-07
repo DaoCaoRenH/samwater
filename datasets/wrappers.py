@@ -1,4 +1,3 @@
-
 import functools
 import random
 import math
@@ -16,6 +15,8 @@ from math import pi
 from torchvision.transforms import InterpolationMode
 
 import torch.nn.functional as F
+
+
 def to_mask(mask):
     return transforms.ToTensor()(
         transforms.Grayscale(num_output_channels=1)(
@@ -36,21 +37,25 @@ class ValDataset(Dataset):
         self.augment = augment
 
         self.img_transform = transforms.Compose([
-                transforms.Resize((inp_size, inp_size)),
-                transforms.ToTensor(),
-                transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                     std=[0.229, 0.224, 0.225])
-            ])
+            transforms.Resize((inp_size, inp_size)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                 std=[0.229, 0.224, 0.225])
+        ])
         self.mask_transform = transforms.Compose([
-                # transforms.Resize((inp_size, inp_size), interpolation=Image.NEAREST),
-                transforms.ToTensor(),
-            ])
+            # transforms.Resize((inp_size, inp_size), interpolation=Image.NEAREST),
+            transforms.ToTensor(),
+        ])
 
     def __len__(self):
         return len(self.dataset)
+        # return int(len(self.dataset)*0.2)
 
     def __getitem__(self, idx):
         img, mask = self.dataset[idx]
+        # img, mask = self.dataset[int(len(self.dataset)*0.8)+idx]
+        # img = transforms.Resize(576)(img)
+        # mask = transforms.Resize(576, interpolation=InterpolationMode.NEAREST)(mask)
         return {
             'inp': self.img_transform(img),
             'gt': self.mask_transform(mask)
@@ -71,24 +76,30 @@ class TrainDataset(Dataset):
 
         self.inp_size = inp_size
         self.img_transform = transforms.Compose([
-                transforms.Resize((self.inp_size, self.inp_size)),
-                transforms.ToTensor(),
-                transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                     std=[0.229, 0.224, 0.225])
-            ])
+            transforms.Resize((self.inp_size, self.inp_size)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                 std=[0.229, 0.224, 0.225])
+        ])
         self.inverse_transform = transforms.Compose([
-                transforms.Normalize(mean=[0., 0., 0.],
-                                     std=[1/0.229, 1/0.224, 1/0.225]),
-                transforms.Normalize(mean=[-0.485, -0.456, -0.406],
-                                     std=[1, 1, 1])
-            ])
+            transforms.Normalize(mean=[0., 0., 0.],
+                                 std=[1 / 0.229, 1 / 0.224, 1 / 0.225]),
+            transforms.Normalize(mean=[-0.485, -0.456, -0.406],
+                                 std=[1, 1, 1])
+        ])
+        # self.mask_transform = transforms.Compose([
+        #         transforms.Resize((self.inp_size, self.inp_size)),
+        #         transforms.ToTensor(),
+        #     ])
+        ############################################################
         self.mask_transform = transforms.Compose([
-                transforms.Resize((self.inp_size, self.inp_size)),
-                transforms.ToTensor(),
-            ])
+            transforms.Resize((self.inp_size, self.inp_size)),
+            transforms.ToTensor(),
+        ])
 
     def __len__(self):
         return len(self.dataset)
+        # return int(len(self.dataset) * 0.8)
 
     def __getitem__(self, idx):
         img, mask = self.dataset[idx]
@@ -98,7 +109,42 @@ class TrainDataset(Dataset):
             img = img.transpose(Image.FLIP_LEFT_RIGHT)
             mask = mask.transpose(Image.FLIP_LEFT_RIGHT)
 
-        
+        # img = transforms.Resize(1024)(img)
+        # mask = transforms.Resize(1024, interpolation=InterpolationMode.NEAREST)(mask)
+
+        return {
+            'inp': self.img_transform(img),
+            'gt': self.mask_transform(mask)
+        }
+
+
+@register('test')
+class TestDataset(Dataset):
+    def __init__(self, dataset, inp_size=None, augment=False):
+        self.dataset = dataset
+        self.inp_size = inp_size
+        self.augment = augment
+
+        self.img_transform = transforms.Compose([
+            transforms.Resize((inp_size, inp_size)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                 std=[0.229, 0.224, 0.225])
+        ])
+        self.mask_transform = transforms.Compose([
+            # transforms.Resize((inp_size, inp_size), interpolation=Image.NEAREST),
+            transforms.ToTensor(),
+        ])
+
+    def __len__(self):
+        return len(self.dataset)
+        # return int(len(self.dataset)*0.2)
+
+    def __getitem__(self, idx):
+        # img, mask = self.dataset[idx]
+        img, mask = self.dataset[idx]
+        # img = transforms.Resize(576)(img)
+        # mask = transforms.Resize(576, interpolation=InterpolationMode.NEAREST)(mask)
         return {
             'inp': self.img_transform(img),
             'gt': self.mask_transform(mask)
